@@ -11,6 +11,8 @@ $(function(){
 '</article>';  
 
     function renderShows(data){
+        $container.find('.loader').remove();
+
         data.forEach(function (show){
             var article=template
             .replace(':name:',show.name)
@@ -50,12 +52,36 @@ $(function(){
     })  
               
     //request de shows
+
+    if(!localStorage.data){
+
+        $.ajax({
+            url:'http://api.tvmaze.com/shows',
+            success:function(data,textStatus,xhr){
+                //console.log(data);            
+                $container.find('.loader').remove();
+                localStorage.data=JSON.stringify(data);
+                renderShows(data);
+            }
+        }); 
+
+        console.log('true');
+    }else{
+        console.log('else');
+        renderShows(JSON.parse(localStorage.data))
+    }
+
+
+    /*
+    --sin localStorage
     $.ajax({
         url:'http://api.tvmaze.com/shows',
         success:function(data,textStatus,xhr){
             //console.log(data);            
             $container.find('.loader').remove();
+            localStorage.data=JSON.stringify(data);
             renderShows(data);
         }
-    });          
+    });  
+    */        
 })
