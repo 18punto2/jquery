@@ -1,5 +1,11 @@
 $(function(){
     var $container=$('#app-body').find('.tv-shows');
+
+    $container.on('click','button.like',function(e){
+        var $this=$(this);
+        $this.closest('.tv-show').toggleClass('liked')
+    })
+
     var template='<article class="tv-show">'+
     '<div class="left img-container">'+
         '<img src=":img:" alt=":img alt:">  '+   
@@ -7,6 +13,7 @@ $(function(){
     '<div class="right info">'+
         '<h1>:name:</h1>'+
         '<p>:summary:</p>'+
+        '<button class="like">Like</button>'+
     '</div>'+
 '</article>';  
 
@@ -21,7 +28,7 @@ $(function(){
             .replace(':img alt:',show.name+" Logo")
 
             var $article=$(article);
-            $container.append($article);
+            $container.append($article.fadeIn(5000));
         })    
     }
 
@@ -52,7 +59,8 @@ $(function(){
     })  
               
     //request de shows
-
+    //usando localStorage
+    /*
     if(!localStorage.data){
 
         $.ajax({
@@ -71,17 +79,18 @@ $(function(){
         renderShows(JSON.parse(localStorage.data))
     }
 
-
-    /*
-    --sin localStorage
+    */
+    
+    //sin localStorage
     $.ajax({
         url:'http://api.tvmaze.com/shows',
         success:function(data,textStatus,xhr){
             //console.log(data);            
             $container.find('.loader').remove();
-            localStorage.data=JSON.stringify(data);
             renderShows(data);
         }
     });  
-    */        
+
+
+          
 })
